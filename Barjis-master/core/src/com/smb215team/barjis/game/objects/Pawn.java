@@ -47,7 +47,8 @@ public class Pawn extends AbstractGameObject {
           float vert =0.40f;        //----vertical -0.2 1 ( +0, +0.4 )
           float horzsign;
           float vertsign;
-          float vertsignup,horzsignleft;
+          float horizborder =3.75f;
+                  float vertsignup,horzsignleft;
             
            for (int i = 1; i <= v; i++){
           
@@ -67,11 +68,11 @@ public class Pawn extends AbstractGameObject {
               if ( yposnew >=-1 && yposnew <=1)
               {  
                   
-                     if (abs(xposnew + (horz*coefx)) < 3.75f )
+                     if (abs(xposnew + (horz*coefx)) < horizborder)
                       {   xposnew=xposnew +(horz*coefx); }
                      else 
                          
-                       { if(round(xposnew,2) == -3.75f)
+                       { if(round(xposnew,2) == horizborder*-1)
                            {yposnew = yposnew -(0.2f*horzsignleft);   horzsignleft =horzsignleft*-1;}
                        }
                       
