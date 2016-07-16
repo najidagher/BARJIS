@@ -5,8 +5,6 @@
  */
 package com.smb215team.barjis.game;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;//for testing
 import com.badlogic.gdx.audio.Sound;
@@ -14,39 +12,90 @@ import com.smb215team.barjis.game.objects.Dice;
 import com.smb215team.barjis.game.objects.DiceContainer;
 import com.smb215team.barjis.game.objects.Dices;
 import com.smb215team.barjis.game.objects.Pawn;
-
+import com.smb215team.barjis.util.Constants;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
+import com.smb215team.barjis.game.objects.Player;
+import com.smb215team.barjis.screens.MenuScreen;
+import java.lang.String;
+import com.smb215team.barjis.util.CellClass;
 /**
  *
  * @author dinosaadeh
  */
 public class GameController {
     private static final String TAG = GameController.class.getName();
-    
-    public float dummyTimerForThrowingDices = 0.0f;
-    Pawn dummyPawn;
-    Dice dummyDice;
-    
-    DiceContainer diceContainer;
-    Sound diceSound = Gdx.audio.newSound(Gdx.files.internal("diceSound.mp3"));
+    private Game game;
 
     
-    public GameController () {
+    // <editor-fold desc="Dino: TO DELETE Dummy stuff">
+    public float dummyTimerForThrowingDices = 0.0f;
+    Pawn[] dummyPawnToFillMap;
+    // </editor-fold>
+    
+    Player[] players;
+    DiceContainer diceContainer;
+    
+    Sound diceSound = Gdx.audio.newSound(Gdx.files.internal("diceSound.mp3"));
+    
+    public GameController (Game game) {
+        this.game = game;
         init();
     }
     
     private void init () {
+        Dices.instance.init();
         initTestObjects();
     }
     
     private void initTestObjects() {
         // <editor-fold desc="Dino: TO DELETE Dummy pawn/dice">
-        dummyPawn = new Pawn();
-         dummyDice = new Dice();
-        float randomX = MathUtils.random(-7.0f, -5.0f);
-        float randomY = MathUtils.random(-4.0f, 0f);
-       dummyDice.position.set(randomX, randomY);
-       dummyDice.bounds.set(randomX, randomY, 0.45f, 0.45f);
-       dummyDice.dimension.set(0.45f, 0.45f);
+        //dummyPawnToFillMap = new Pawn[2];
+     dummyPawnToFillMap = new Pawn[24];
+       
+      //CellClass[][][] cellarray = new CellClass[4][3][8];
+      CellClass[] cellarray = new CellClass[96];
+      String cat[] = new String[]{"A","B","C","D"};
+      int cnt=0;
+      for (int i= 1;i<=1;i++){
+          
+     
+    for (int j=1;j<=3;j++)
+    {
+    for (int z=1;z<=8;z++){
+        
+   // arr[0] = new Employee("Peter", 100);
+   Vector2 V =new Vector2(i/1f,j/1f); 
+         
+      
+   cellarray[0] =new CellClass(cat[i],V);
+ 
+      dummyPawnToFillMap[cnt] = new Pawn(); 
+           
+           dummyPawnToFillMap[cnt].position.set(Constants.boardMap[cnt].x, Constants.boardMap[cnt].y);
+  cnt =cnt+1;
+   ////////we should know assign the  coordinates in the cellClass not in the constants
+      }
+   } 
+   } 
+      
+     /*
+         
+      dummyPawnToFillMap[0] = new Pawn();
+ dummyPawnToFillMap[0].position.set(-0.2f,-1.4f);
+ 
+  dummyPawnToFillMap[1] = new Pawn();
+   dummyPawnToFillMap[1].position.set(-0.2f,-1.8f);
+    */
+         
+      /*
+    for(int i = 0; i < dummyPawnToFillMap.length; i++) {
+           dummyPawnToFillMap[i] = new Pawn(); 
+           
+           dummyPawnToFillMap[i].position.set(Constants.boardMap[i].x, Constants.boardMap[i].y);
+
+        }  
+      */
         // </editor-fold>
 
         diceContainer = new DiceContainer();  
@@ -54,15 +103,18 @@ public class GameController {
     
     public void update (float deltaTime) {
         handleDebugInput(deltaTime);
-        dummyPawn.update(deltaTime);        
-       dummyDice.update(deltaTime);
         Dices.instance.update(deltaTime); //commentToDelete: later on this will be called only when needed
         
         testCollisions ();
- 
+
         // <editor-fold desc="Dino: Dummy timer to throw dices">
         dummyTimerForThrowingDices += deltaTime;
-        
+        if(dummyTimerForThrowingDices >= 5 && Dices.instance.canPlayerThrowDices) {
+            Dices.instance.throwDices(diceContainer.diceMarginFromX, diceContainer.diceMarginToX, diceContainer.diceMarginFromY, diceContainer.diceMarginToY);
+            diceSound.play();
+            dummyTimerForThrowingDices -= 5.0f; // If you reset it to 0 you will loose a few milliseconds every 2 seconds.
+            Gdx.app.log(TAG, Dices.instance.getValue());
+        }
         // </editor-fold>
     }
 
@@ -72,44 +124,8 @@ public class GameController {
     
     private void handleDebugInput(float deltaTime) {
         if (Gdx.app.getType() != com.badlogic.gdx.Application.ApplicationType.Desktop) {
-            
-             return;    }
-        
-        if ( Gdx.input.isKeyPressed(Keys.R))
-        {Dices.instance.canPlayerThrowDices=true;
-        // dummyPawn.SetPosition(1,0,0,3); 
+            return;
         }
-       //    if (Gdx.input.isKeyPressed(Keys.T)) {
-         if(dummyTimerForThrowingDices >= 5 && Dices.instance.canPlayerThrowDices && Gdx.input.isKeyPressed(Keys.T)) {
-      // if(dummyTimerForThrowingDices >= 5  ) {
-            Dices.instance.throwDices(diceContainer.diceMarginFromX, diceContainer.diceMarginToX, diceContainer.diceMarginFromY, diceContainer.diceMarginToY);
-            diceSound.play();
-            dummyTimerForThrowingDices -= 5.0f; // If you reset it to 0 you will loose a few milliseconds every 2 seconds.
-            Gdx.app.log(TAG, Dices.instance.getValue());
-            
-            
-            
-                          ///////////naji throw dices manually 
-        
-              
-             String v = Dices.instance.getValuef();
-            float Posx = dummyPawn.getposx();
-            float Posy = dummyPawn.getposy();
-             int n = Integer.parseInt(v); 
-         //   dummyPawn.SetPosition(vf/10, vf/10);
-            dummyPawn.SetPosition(n,Posx , Posy ,1);
-
-             
-             
-//                  Assets.instance.fonts.defaultNormal.draw(batch, "x= " + Posx + " y= "+ Posy,  75,  37);
-             
-             Gdx.app.log(TAG, Dices.instance.getValue());
-       
-        ///////////naji throw dices manually 
-        }    
-  
-       
-    
 // Selected Sprite Controls
         float sprMoveSpeed = 5 * deltaTime;
         if (Gdx.input.isKeyPressed(Keys.A)) {
@@ -129,6 +145,10 @@ public class GameController {
         }
     }
 
+    private void backToMenu () {
+        // switch to menu screen
+        game.setScreen(new MenuScreen(game));
+    }
     private void moveSelectedSprite(float x, float y) {
         //testSprites[selectedSprite].translate(x, y);
     }
