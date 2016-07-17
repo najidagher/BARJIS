@@ -51,9 +51,63 @@ public class GameController {
     private void initTestObjects() {
         // <editor-fold desc="Dino: TO DELETE Dummy pawn/dice">
         //dummyPawnToFillMap = new Pawn[2];
-     dummyPawnToFillMap = new Pawn[96]; 
+      ////player function
+      
+      CellClass[] path =new CellClass[190];
+      dummyPawnToFillMap = new Pawn[75]; 
+        String cat[] = new String[]{"A","B","C","D"};
+        int pcat=0; 
+        int pcategorie=0;
+        int cnt1=0; 
+        
+    for(int i = 0; i<=3; i++){
+        for(int j=0;j<=2;j++)  {
+            for(int z=0;z<=7;z++){       
+                /////this condition is only valid for player=1 untill now
+         if ((i==pcategorie && (j==1 ||j==2) ) || ((i!=pcategorie ) &&(j!=1 || z==7)) )
+                /////this condition is only valid for player=1 untill now
+              {      
+                 Vector2 Vect =new Vector2(j/1f,z/1f);
+                 path[cnt1] = new CellClass(cat[pcat],Vect);
+                 
+                 dummyPawnToFillMap[cnt1] = new Pawn();            
+                 dummyPawnToFillMap[cnt1].position.set(path[cnt1].getposition(path[cnt1], "x")
+                                               ,path[cnt1].getposition(path[cnt1], "y"));
+                 
+                  System.out.println("pcat "+pcat+" cnt= "+cnt1+ " x= "+path[cnt1].getposition(path[cnt1], "x")+""
+                                                  + " y="+path[cnt1].getposition(path[cnt1], "y"));
+                 cnt1=cnt1+1;
+                }     
+                                }
+                               }
+        pcat=pcat+1; if (pcat >3) {pcat=pcat-3;}        }    
+       
+                for(int w=0;w<=7;w++) { 
+                Vector2 Vect =new Vector2(0/1f,w/1f);
+                path[cnt1] = new CellClass(cat[0],Vect);
+               int s=cnt1;
+               
+               dummyPawnToFillMap[cnt1] = new Pawn();            
+                 dummyPawnToFillMap[cnt1].position.set(path[cnt1].getposition(path[cnt1], "x")
+                                               ,path[cnt1].getposition(path[cnt1], "y"));
+                 System.out.println("cnt= "+s+" x2nd= "
+                                   +path[cnt1].getposition(path[cnt1], "x")+" y="
+                                   +path[cnt1].getposition(path[cnt1], "y"));
+                    cnt1=cnt1+1;}
+                for(int h=cnt1;h<cnt1+8;h++)
+                {
+                 Vector2 Vect =new Vector2(0/1f,h/1f);
+                path[h] = new CellClass(cat[0],Vect);
+                
+                 System.out.println("cnt= "+h+" x3rd= "
+                                   +path[h].getposition(path[h], "x")+" y="
+                                   +path[h].getposition(path[h], "y"));
+                } 
+     ////player function      
+     /*
+      dummyPawnToFillMap = new Pawn[96]; 
       CellClass[] cellarray = new CellClass[96];//creating 96 cell
-      String cat[] = new String[]{"A","B","C","D"};//A-->Left ; B-->Bottom  ; C--> Right ;   D-->Top
+    //  String cat[] = new String[]{"A","B","C","D"};//A-->Left ; B-->Bottom  ; C--> Right ;   D-->Top
       int cnt=0;
       for (int i= 0;i<=3;i++){  ///// pour les 4 categories
               for (int j=0;j<=2;j++){  ///pour les lignes/colones
@@ -70,6 +124,8 @@ public class GameController {
                                            }
                                      } 
                                } 
+       
+      */
       
      /*
          
@@ -108,6 +164,8 @@ public class GameController {
             dummyTimerForThrowingDices -= 5.0f; // If you reset it to 0 you will loose a few milliseconds every 2 seconds.
             Gdx.app.log(TAG, Dices.instance.getValue());
         }
+        //Player.playerpath(0);
+        
         // </editor-fold>
     }
 
