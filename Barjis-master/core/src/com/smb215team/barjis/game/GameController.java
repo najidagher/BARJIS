@@ -51,33 +51,25 @@ public class GameController {
     private void initTestObjects() {
         // <editor-fold desc="Dino: TO DELETE Dummy pawn/dice">
         //dummyPawnToFillMap = new Pawn[2];
-     dummyPawnToFillMap = new Pawn[24];
-       
-      //CellClass[][][] cellarray = new CellClass[4][3][8];
-      CellClass[] cellarray = new CellClass[96];
-      String cat[] = new String[]{"A","B","C","D"};
+     dummyPawnToFillMap = new Pawn[96]; 
+      CellClass[] cellarray = new CellClass[96];//creating 96 cell
+      String cat[] = new String[]{"A","B","C","D"};//A-->Left ; B-->Bottom  ; C--> Right ;   D-->Top
       int cnt=0;
-      for (int i= 1;i<=1;i++){
-          
-     
-    for (int j=1;j<=3;j++)
-    {
-    for (int z=1;z<=8;z++){
+      for (int i= 0;i<=3;i++){  ///// pour les 4 categories
+              for (int j=0;j<=2;j++){  ///pour les lignes/colones
+                    for (int z=0;z<=7;z++){  ///pour les lignes/colones
         
-   // arr[0] = new Employee("Peter", 100);
-   Vector2 V =new Vector2(i/1f,j/1f); 
-         
-      
-   cellarray[0] =new CellClass(cat[i],V);
- 
-      dummyPawnToFillMap[cnt] = new Pawn(); 
-           
-           dummyPawnToFillMap[cnt].position.set(Constants.boardMap[cnt].x, Constants.boardMap[cnt].y);
-  cnt =cnt+1;
-   ////////we should know assign the  coordinates in the cellClass not in the constants
-      }
-   } 
-   } 
+            Vector2 V =new Vector2(j/1f,z/1f);////on cree le vecteur ligne colone. 
+            cellarray[cnt] =new CellClass(cat[i],V);///on cree la classe cell contenant la categorie +le vecteur ligne/colone 
+           dummyPawnToFillMap[cnt] = new Pawn();            
+           dummyPawnToFillMap[cnt].position.set(cellarray[cnt].getposition(cellarray[cnt], "x")
+                                               ,cellarray[cnt].getposition(cellarray[cnt], "y"));
+  
+          cnt =cnt+1;///represents the cell number from 0 till 95
+   
+                                           }
+                                     } 
+                               } 
       
      /*
          
@@ -95,7 +87,8 @@ public class GameController {
            dummyPawnToFillMap[i].position.set(Constants.boardMap[i].x, Constants.boardMap[i].y);
 
         }  
-      */
+    */
+      
         // </editor-fold>
 
         diceContainer = new DiceContainer();  
